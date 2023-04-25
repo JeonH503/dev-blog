@@ -119,8 +119,8 @@ export const getAllPages = async () => {
     return mappings
 }
 
-export const getPage = async (title:string, id:string) => { //title 캐시하기 위한 매개변수 실제사용 X
-    const response:any = await fetch(`https://api.notion.com/v1/blocks/${id}/children`, //모든 데이터 가져오는 쿼리
+const pageMapping = async (title:string, id:string | null) => { //staticPaths 에서 한번 실행되고 나면 id 필요 없음
+    const response:any = await fetch(`https://api.notion.com/v1/blocks/${id}/children`, //block 데이터 가져오는 쿼리
         {
             headers:{Authentication: `Bearer ${token}`}
         }
@@ -130,4 +130,14 @@ export const getPage = async (title:string, id:string) => { //title 캐시하기
         title:title,
         blocks:response.results
     }
+}
+
+export const getPage = pMemoize(pageMapping);
+
+export const cachingAllPages = async () => {
+    const pages = await getAllPages();
+    
+    pages.forEach(page => pageMapping(page.name, page.id)); //페이지 전부 캐싱
+
+    return pages
 }
