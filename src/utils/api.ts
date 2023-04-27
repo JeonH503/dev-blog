@@ -1,13 +1,11 @@
-import pMemoize from "p-memoize";
-
+import fs from 'fs';
 const database_id = 'bab4339516874f58b9c7c3e542a791c9';
 const token = 'secret_JtdV6RdpsJNiwIs871Lrzkya5Af0hFyXcDoIECGtT96';
+let posts = require('./posts.json');
 
 interface Posts {
     results:Result[];
 }
-
-
 
 interface Result {
     object: string,
@@ -96,48 +94,66 @@ interface Result {
     url: string
 }
 
-
-
-
-export const getAllPages = async () => {
-    const response:any = await fetch(`https://api.notion.com/v1/databases/${database_id}/query`, //모든 데이터 가져오는 쿼리
-        {
-            method:"post",
-            headers:{Authentication: `Bearer ${token}`}
-        }
-    )
-
-    const posts:Posts = response.json()
-    
-    const mappings = posts.results.map((post) => ({
-        created_time:post.properties.생성일.created_time,
-        id:post.properties.ID.rich_text[0].plain_text,
-        tag:post.properties.태그.multi_select,
-        name:post.properties.이름.title[0].plain_text
-    }))
-
-    return mappings
-}
-
-const pageMapping = async (title:string, id:string | null) => { //staticPaths 에서 한번 실행되고 나면 id 필요 없음
-    const response:any = await fetch(`https://api.notion.com/v1/blocks/${id}/children`, //block 데이터 가져오는 쿼리
-        {
-            headers:{Authentication: `Bearer ${token}`}
-        }
-    )
-
-    return {
-        title:title,
-        blocks:response.results
+interface PostsMap {
+    [key:string]:{
+        created_time:string;
+        id:string;
+        tag:string;
+        name:string;
     }
 }
 
-export const getPage = pMemoize(pageMapping);
+export const getPages = async () => {
+    const response:any = await fetch(`https://api.notion.com/v1/databases/${database_id}/query`, //모든 데이터 가져오는 쿼리
+        {
+            method:"post",
+            headers:{
+                'Authorization' : `Bearer ${token}`,
+                'Content-Type' : 'application/json',
+                'Notion-Version' : '2022-02-22'
+            }
+        }
+    )
 
-export const cachingAllPages = async () => {
-    const pages = await getAllPages();
+    const posts:Posts = await response.json()
+    let mappings = {} as PostsMap
+
+    posts.results.forEach((post) => {
+        mappings[post.properties.이름.title[0].plain_text.replaceAll(" ",'-')] = {
+            created_time:post.properties.생성일.created_time,
+            id:post.properties.ID.rich_text[0].plain_text,
+            tag:post.properties.태그.multi_select[0].name,
+            name:post.properties.이름.title[0].plain_text
+        }   
+    })
+
+    fs.writeFileSync('src/utils/posts.json', JSON.stringify(mappings));
     
-    pages.forEach(page => pageMapping(page.name, page.id)); //페이지 전부 캐싱
+    return mappings
+}
 
-    return pages
+export const getPage = async (id:string) => { //staticPaths 에서 한번 실행되고 나면 id 필요 없음
+    const decodedId = decodeURIComponent(id)
+    
+    let post = posts[decodedId];
+    
+    if(!post) {
+        await getPages()
+        posts = require('./posts.json');
+    }
+
+    const response:any = await fetch(`https://api.notion.com/v1/blocks/${post?.id}/children`, //block 데이터 가져오는 쿼리
+        {
+            headers:{
+                'Authorization' : `Bearer ${token}`,
+                'Content-Type' : 'application/json',
+                'Notion-Version' : '2022-02-22'
+            },
+            next:{
+                revalidate:300
+            }
+        }
+    )
+
+    return await response.json()
 }
