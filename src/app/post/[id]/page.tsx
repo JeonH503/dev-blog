@@ -1,11 +1,13 @@
-import { getPages,getPage } from "../../../utils/api";
+import { getAllPages,getPage } from "../../../utils/post-api";
+import NotionRenderer from "../component/NotionRenderer";
+import { FirstBlock } from '@/utils/block-types';
 
 type params = {id:string}
 
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-    let pages = await getPages()
+    let pages = await getAllPages()
     return Object.keys(pages).map((page) => ({id:page}))
 }
 
@@ -16,6 +18,9 @@ async function getCachedPage(params:params) {
 
 export default async function post({params}:{params:params}) {
     const post = await getCachedPage(params);
-    // post status 400일때 error 페이지로 redirect 필요
-    return <>{post.type}</>
+    
+
+    return <div>
+        {post===null ? '' : <NotionRenderer blocks={post} />}
+    </div>
 }

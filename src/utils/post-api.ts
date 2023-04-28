@@ -1,10 +1,10 @@
-import fs from 'fs';
 const database_id = 'bab4339516874f58b9c7c3e542a791c9';
 const token = 'secret_JtdV6RdpsJNiwIs871Lrzkya5Af0hFyXcDoIECGtT96';
-let posts = require('./posts.json');
 
 interface Posts {
     results:Result[];
+    next_cursor: string | null,
+    has_more: boolean,
 }
 
 interface Result {
@@ -103,7 +103,9 @@ interface PostsMap {
     }
 }
 
-export const getPages = async () => {
+// notion db로 바꾸는게 더 좋을지도??
+
+export const getAllPages = async (next_cursor?:string) => {
     const response:any = await fetch(`https://api.notion.com/v1/databases/${database_id}/query`, //모든 데이터 가져오는 쿼리
         {
             method:"post",
@@ -111,7 +113,8 @@ export const getPages = async () => {
                 'Authorization' : `Bearer ${token}`,
                 'Content-Type' : 'application/json',
                 'Notion-Version' : '2022-02-22'
-            }
+            },
+            body:JSON.stringify({next_cursor})
         }
     )
 
@@ -126,8 +129,6 @@ export const getPages = async () => {
             name:post.properties.이름.title[0].plain_text
         }   
     })
-
-    fs.writeFileSync('src/utils/posts.json', JSON.stringify(mappings));
     
     return mappings
 }
@@ -135,14 +136,12 @@ export const getPages = async () => {
 export const getPage = async (id:string) => { //staticPaths 에서 한번 실행되고 나면 id 필요 없음
     const decodedId = decodeURIComponent(id)
     
-    let post = posts[decodedId];
-    
-    if(!post) {
-        await getPages()
-        posts = require('./posts.json');
-    }
+    let post_id = await searchPost(decodedId)
 
-    const response:any = await fetch(`https://api.notion.com/v1/blocks/${post?.id}/children`, //block 데이터 가져오는 쿼리
+    if(post_id === null)
+        return null;
+
+    const response:any = await fetch(`https://api.notion.com/v1/blocks/${post_id}/children`, //block 데이터 가져오는 쿼리
         {
             headers:{
                 'Authorization' : `Bearer ${token}`,
@@ -156,4 +155,30 @@ export const getPage = async (id:string) => { //staticPaths 에서 한번 실행
     )
 
     return await response.json()
+}
+
+export const searchPost = async (title:string) => {
+    const response:any = await fetch(`https://api.notion.com/v1/search`, //block 데이터 가져오는 쿼리
+        {
+            method:"post",
+            headers:{
+                'Authorization' : `Bearer ${token}`,
+                'Content-Type' : 'application/json',
+                'Notion-Version' : '2022-02-22'
+            },
+            body:JSON.stringify({
+                query: title,
+                filter:{
+                    value: "page",
+                    property: "object"
+                }
+            })
+        }
+    )
+
+    const post:Posts = await response.json()
+    
+    if(post.results.length === 2)
+        return post.results[0].properties.ID.rich_text[0].plain_text
+    return null;
 }
