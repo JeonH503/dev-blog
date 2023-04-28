@@ -103,8 +103,7 @@ interface PostsMap {
     }
 }
 
-// notion db로 바꾸는게 더 좋을지도??
-
+// 새 빌드시 포스트 100개가 넘으면??
 export const getAllPages = async (next_cursor?:string) => {
     const response:any = await fetch(`https://api.notion.com/v1/databases/${database_id}/query`, //모든 데이터 가져오는 쿼리
         {
@@ -164,7 +163,7 @@ export const searchPost = async (title:string) => {
             headers:{
                 'Authorization' : `Bearer ${token}`,
                 'Content-Type' : 'application/json',
-                'Notion-Version' : '2022-02-22'
+                'Notion-Version' : '2022-02-22' 
             },
             body:JSON.stringify({
                 query: title,
