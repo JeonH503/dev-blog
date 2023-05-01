@@ -1,5 +1,5 @@
 import { getAllPages,getPage } from "../../../utils/post-api";
-import NotionRenderer from "../component/NotionRenderer";
+import NotionRenderer from "../NotionRenderer";
 import { FirstBlock } from '@/utils/block-types';
 
 type params = {id:string}

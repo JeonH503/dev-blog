@@ -1,21 +1,33 @@
 import StyledComponentsRegistry from './lib/registry'
 import GlobalStyles from "../styles/GlobalStyles";
-import { Header,Main } from './components';
+import FlexBox from '@/styles/FlexBox';
+import { Header,Main,Sidebar } from './components';
+import { getAllCategories } from '@/utils/category-api';
 
-export default function RootLayout({
+
+async function getCategories() {
+  return await getAllCategories();
+}
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const categories = await getCategories()
+
   return (
     <html lang="en">
       <body>
         <StyledComponentsRegistry>
           <GlobalStyles/>
           <Header/>
-          <Main>
-            {children}
-          </Main>
+          <FlexBox>
+            <Main>
+              {children}
+            </Main>
+            <Sidebar categories={categories} />
+          </FlexBox>
         </StyledComponentsRegistry>
       </body>
     </html>

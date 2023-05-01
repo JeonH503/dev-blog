@@ -95,7 +95,7 @@ interface Result {
     url: string
 }
 
-interface PostsMap {
+export interface PostsMap {
     [key:string]:{
         created_time:string;
         id:string;
@@ -132,7 +132,7 @@ interface Category {
 
 export const getAllCategories = async () => {
     const response:any = await fetch(`https://api.notion.com/v1/blocks/${categories_id}/children`,{
-        method:"post",
+        method:"get",
         headers:{
             'Authorization' : `Bearer ${token}`,
             'Content-Type' : 'application/json',
@@ -142,7 +142,7 @@ export const getAllCategories = async () => {
     
     const categories:Categories = await response.json()
 
-    return categories.results.map((category:Category) => category.child_page.title)
+    return categories.results.map((category:Category) => category.child_page?.title)
 }
 
 
@@ -158,7 +158,7 @@ export const getCategorizedPosts = async (category:string) => {
             "filter": {
               "property": "태그",
               "multi_select": {
-                "contains": "React"
+                "contains": category
               }
             }
         })
