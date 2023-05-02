@@ -3,11 +3,8 @@
 import styled from "styled-components"
 
 const MainWrap = styled.section`
-    width:40%;
-    background:white;
+    width:700px;
     padding:10px 20px;
-    border-radius:10px;
-    border:1px solid #eaeaea;
 `
 
 function Main({children}:{children: React.ReactNode}) {

@@ -7,6 +7,8 @@ import styled from "styled-components"
 const SidebarWrap = styled.div`
     display:flex;
     flex-direction: column;
+    padding-top:10px;
+    width:200px;
 `
 
 function Sidebar({categories}:{categories:string[]}) {

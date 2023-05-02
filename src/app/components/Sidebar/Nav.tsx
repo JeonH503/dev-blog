@@ -7,13 +7,14 @@ const NavWrap = styled.nav`
     padding:10px 20px;
     border-radius:10px;
     border:1px solid #eaeaea;
-    margin:5px 20px;
+    margin-top:15px;
+    width:100%;
 `
 
 function Nav({categories}:{categories:string[]}) {
     return<NavWrap>
         <ul>
-            {categories.map(category => <li>{category}</li>)}
+            {categories.map(category => <li key={category}>{category}</li>)}
         </ul>
     </NavWrap>
 }

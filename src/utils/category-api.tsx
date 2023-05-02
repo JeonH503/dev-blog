@@ -2,6 +2,8 @@ const database_id = 'bab4339516874f58b9c7c3e542a791c9';
 const categories_id = 'b3cd5b5181ad464081f73f7d7772504d';
 const token = 'secret_JtdV6RdpsJNiwIs871Lrzkya5Af0hFyXcDoIECGtT96';
 
+import { FileExternal,File } from "./block-types";
+
 interface Posts {
     results:Result[];
     next_cursor: string | null,
@@ -9,88 +11,88 @@ interface Posts {
 }
 
 interface Result {
-    object: string,
-    id: string,
-    created_time: string,
-    last_edited_time: string,
+    object: string;
+    id: string;
+    created_time: string;
+    last_edited_time: string;
     created_by: {
-        object: string,
+        object: string;
         id: string
-    },
+    };
     last_edited_by: {
-        object: string,
+        object: string;
         id: string
-    },
-    cover: null | string,
-    icon: null | string,
+    };
+    cover: FileExternal|File|null;
+    icon: null | string;
     parent: {
-        type: string,
+        type: string;
         database_id: string
-    },
-    archived: false,
+    };
+    archived: false;
     properties: {
         생성일: {
-            id: string,
-            type: string,
+            id: string;
+            type: string;
             created_time: string
-        },
+        };
         ID: {
-            id: string,
-            type: string,
+            id: string;
+            type: string;
             rich_text: [
                 {
-                    type: string,
+                    type: string;
                     text: {
-                        content: string,
+                        content: string;
                         link: null
-                    },
+                    };
                     annotations: {
-                        bold: boolean,
-                        italic: boolean,
-                        strikethrough: boolean,
-                        underline: boolean,
-                        code: boolean,
+                        bold: boolean;
+                        italic: boolean;
+                        strikethrough: boolean;
+                        underline: boolean;
+                        code: boolean;
                         color: string
-                    },
-                    plain_text: string,
+                    };
+                    plain_text: string;
                     href: null
                 }
             ]
-        },
+        };
         태그: {
-            id: string,
-            type: string,
+            id: string;
+            type: string;
             multi_select: [
                 {
-                    id: string,
-                    name: string,
+                    id: string;
+                    name: string;
                     color: string
                 }
             ]
-        },
+        };
         이름: {
-            id: string,
-            type: string,
+            id: string;
+            type: string;
             title: [
                 {
-                    type: string,
+                    type: string;
                     text: {
-                        content: string,
+                        content: string;
                         link: null
-                    },
+                    };
                     annotations: {
-                        bold: boolean,
-                        italic: boolean,
-                        strikethrough: boolean,
-                        underline: boolean,
-                        code: boolean,
+                        bold: boolean;
+                        italic: boolean;
+                        strikethrough: boolean;
+                        underline: boolean;
+                        code: boolean;
                         color: string
-                    },
-                    plain_text: string,
-                    href: null
+                    };
+                    plain_text: string;
+                    href: null;
                 }
-            ]
-        }
+            ];
+        };
     },
     url: string
 }
@@ -101,6 +103,8 @@ export interface PostsMap {
         id:string;
         tag:string;
         name:string;
+        cover:string;
+        next_cursor:string|null;
     }
 }
 
@@ -161,18 +165,23 @@ export const getCategorizedPosts = async (category:string) => {
                 "contains": category
               }
             }
-        })
+        }),
+        cache: 'no-store'
     })
 
     const posts:Posts = await response.json()
     let mappings = {} as PostsMap
-
+    // console.log(posts.results)
     posts.results.forEach((post) => {
+        
         mappings[post.properties.이름.title[0].plain_text.replaceAll(" ",'-')] = {
             created_time:post.properties.생성일.created_time,
             id:post.properties.ID.rich_text[0].plain_text,
             tag:post.properties.태그.multi_select[0].name,
-            name:post.properties.이름.title[0].plain_text
+            name:post.properties.이름.title[0].plain_text,
+            cover:post.cover === null ? '' :
+            post.cover.type==='file' ? post.cover.file.url : post.cover.external.url,
+            next_cursor:posts.next_cursor
         }   
     })
     
