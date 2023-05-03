@@ -134,9 +134,8 @@ export const getAllPages = async (next_cursor?:string) => {
 
 export const getPage = async (id:string) => { //staticPaths 에서 한번 실행되고 나면 id 필요 없음
     const decodedId = decodeURIComponent(id)
-    
     let post_id = await searchPost(decodedId)
-
+    
     if(post_id === null)
         return null;
 
@@ -157,7 +156,7 @@ export const getPage = async (id:string) => { //staticPaths 에서 한번 실행
 }
 
 export const searchPost = async (title:string) => {
-    const response:any = await fetch(`https://api.notion.com/v1/search`, //block 데이터 가져오는 쿼리
+    const response:any = await fetch(`https://api.notion.com/v1/databases/${database_id}/query`, //block 데이터 가져오는 쿼리
         {
             method:"post",
             headers:{
@@ -166,18 +165,20 @@ export const searchPost = async (title:string) => {
                 'Notion-Version' : '2022-02-22' 
             },
             body:JSON.stringify({
-                query: title,
                 filter:{
-                    value: "page",
-                    property: "object"
+                    property:"이름",
+                    rich_text: {
+                        equals: title
+                    }
                 }
             })
         }
     )
+    
 
     const post:Posts = await response.json()
     
-    if(post.results.length === 2)
+    if(post.results.length === 1)
         return post.results[0].properties.ID.rich_text[0].plain_text
     return null;
 }

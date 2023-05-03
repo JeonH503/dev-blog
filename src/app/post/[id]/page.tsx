@@ -18,7 +18,6 @@ async function getCachedPage(params:params) {
 
 export default async function post({params}:{params:params}) {
     const post = await getCachedPage(params);
-    
 
     return <div>
         {post===null ? '' : <NotionRenderer blocks={post} />}

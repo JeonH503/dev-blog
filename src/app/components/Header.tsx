@@ -24,7 +24,7 @@ const FlexBox = styled.div`
 function Header() {
     return <HeaderWrap>
         <FlexBox>
-            <h2>JJH's Blog</h2>
+            <h2>JJH&apos;s Blog</h2>
         </FlexBox>
     </HeaderWrap>
 }

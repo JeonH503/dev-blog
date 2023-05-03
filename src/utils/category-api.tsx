@@ -166,7 +166,9 @@ export const getCategorizedPosts = async (category:string) => {
               }
             }
         }),
-        cache: 'no-store'
+        next:{
+            revalidate:100
+        }
     })
 
     const posts:Posts = await response.json()
