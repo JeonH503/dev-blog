@@ -9,8 +9,20 @@ const PostWrap = styled.div`
     background:white;
     border-radius:15px;
     border:1px solid #eaeaea;
-    // padding:10px 30px;
     margin-bottom:15px;
+
+    & a {
+        text-decoration:none;
+        color:black;
+    }
+
+    & div:first-child:hover + div h2 a {
+        text-decoration:underline;
+    }
+
+    & h2 > a:hover {
+        text-decoration:underline;
+    }
 `
 
 const FlexWrap = styled.div`
@@ -28,6 +40,11 @@ const Tag = styled.p`
     border:1px solid #eaeaea;
     border-radius:15px;
     text-align:center;
+    transition: all .05s ease-in;
+
+    &:hover {
+        transform: scale(1.05, 1.05);
+    }
 `
 
 const Time = styled.p`
@@ -60,14 +77,22 @@ interface Props {
 function Post({title,created_time,tag,id,cover}:Props) {
     return <PostWrap>
         <ImageWrap cover={cover}> 
-            {cover !== '' ? <Image style={{width:"100%", height:"auto"}} width={660} height={300} src={cover} alt={`${title}-cover`}/> : null}
+            {
+                cover !== '' ? 
+                <Link prefetch={false} href={'/post/'+title}>
+                    <Image style={{width:"100%", height:"auto"}} quality={40} width={660} height={300} src={cover} alt={`${title}-cover`}/>
+                </Link> : 
+                null
+            }
         </ImageWrap>
         <InfoWrap>
             <h2>
                 <Link prefetch={false} href={'/post/'+title}>{title.replaceAll('-',' ')}</Link>
             </h2>
             <FlexWrap>
-                <Tag># {tag}</Tag>
+                <Link prefetch={false} href={'/post/'+title}>
+                    <Tag># {tag}</Tag>
+                </Link>
                 <Time>{moment(created_time).format("YYYY-MM-DD HH:mm:ss")}</Time>
             </FlexWrap>
         </InfoWrap>

@@ -103,8 +103,7 @@ interface PostsMap {
     }
 }
 
-// 새 빌드시 포스트 100개가 넘으면??
-export const getAllPages = async (next_cursor?:string) => {
+const nextPages = async (next_cursor:string|null) => {
     const response:any = await fetch(`https://api.notion.com/v1/databases/${database_id}/query`, //모든 데이터 가져오는 쿼리
         {
             method:"post",
@@ -113,14 +112,21 @@ export const getAllPages = async (next_cursor?:string) => {
                 'Content-Type' : 'application/json',
                 'Notion-Version' : '2022-02-22'
             },
-            body:JSON.stringify({next_cursor})
+            body:next_cursor ? JSON.stringify({start_cursor:next_cursor}) : JSON.stringify({}) //커서가 없으면 빈 객체로 전송
         }
     )
 
-    const posts:Posts = await response.json()
+    let posts:Posts = await response.json()
+    let post_results:Result[] = posts.has_more ? posts.results.concat(await nextPages(posts.next_cursor)) : posts.results;
+
+    return post_results;
+}
+
+export const getAllPages = async () => {
+    let posts:Result[] = await nextPages(null)
     let mappings = {} as PostsMap
 
-    posts.results.forEach((post) => {
+    posts.forEach((post) => {
         mappings[post.properties.이름.title[0].plain_text.replaceAll(" ",'-')] = {
             created_time:post.properties.생성일.created_time,
             id:post.properties.ID.rich_text[0].plain_text,

@@ -104,7 +104,6 @@ export interface PostsMap {
         tag:string;
         name:string;
         cover:string;
-        next_cursor:string|null;
     }
 }
 
@@ -149,8 +148,29 @@ export const getAllCategories = async () => {
     return categories.results.map((category:Category) => category.child_page?.title)
 }
 
+// export const getNextCategorizedPosts = async (category:string,) => {
 
-export const getCategorizedPosts = async (category:string) => {
+// }
+
+export const getCategorizedPosts = async (category:string = '',next_cursor:null|string = null) => {
+    let body = next_cursor ? {
+        "filter": {
+          "property": "태그",
+          "multi_select": {
+            "contains": category
+          }
+        },
+        "start_cursor":next_cursor
+    } : 
+    {
+        "filter": {
+          "property": "태그",
+          "multi_select": {
+            "contains": category
+          }
+        }
+    }
+
     const response:any = await fetch(`https://api.notion.com/v1/databases/${database_id}/query`,{
         method:"post",
         headers:{
@@ -158,14 +178,7 @@ export const getCategorizedPosts = async (category:string) => {
             'Content-Type' : 'application/json',
             'Notion-Version' : '2022-02-22'
         },
-        body:JSON.stringify({
-            "filter": {
-              "property": "태그",
-              "multi_select": {
-                "contains": category
-              }
-            }
-        }),
+        body:JSON.stringify(body),
         next:{
             revalidate:100
         }
@@ -173,19 +186,19 @@ export const getCategorizedPosts = async (category:string) => {
 
     const posts:Posts = await response.json()
     let mappings = {} as PostsMap
-    // console.log(posts.results)
     posts.results.forEach((post) => {
-        
         mappings[post.properties.이름.title[0].plain_text.replaceAll(" ",'-')] = {
             created_time:post.properties.생성일.created_time,
             id:post.properties.ID.rich_text[0].plain_text,
             tag:post.properties.태그.multi_select[0].name,
             name:post.properties.이름.title[0].plain_text,
             cover:post.cover === null ? '' :
-            post.cover.type==='file' ? post.cover.file.url : post.cover.external.url,
-            next_cursor:posts.next_cursor
-        }   
+            post.cover.type==='file' ? post.cover.file.url : post.cover.external.url
+        }
     })
     
-    return mappings
+    return {
+        posts:mappings,
+        next_cursor:posts.next_cursor
+    } as {posts:PostsMap; next_cursor:string|null}
 }
