@@ -185,6 +185,7 @@ export const getCategorizedPosts = async (category:string = '',next_cursor:null|
     })
 
     const posts:Posts = await response.json()
+
     let mappings = {} as PostsMap
     posts.results.forEach((post) => {
         mappings[post.properties.이름.title[0].plain_text.replaceAll(" ",'-')] = {

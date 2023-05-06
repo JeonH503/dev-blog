@@ -15,7 +15,7 @@ const HeaderWrap = styled.header`
 `
 
 const FlexBox = styled.div`
-    width:70%;
+    width:900px;
     height:100%;
     display:flex;
     align-items: center;
@@ -24,8 +24,19 @@ const FlexBox = styled.div`
     & a {
         text-decoration:none;
         color:black;
+        margin:0 20px;
     }
 `
+
+// /* 데스크탑 */
+
+// @media screen and (max-width:1023px) {
+//     /* 타블렛 */
+//     }
+    
+//     @media screen and (max-width:767px) {
+//     /* 모바일 */
+//     }
 
 function Header() {
     return <HeaderWrap>

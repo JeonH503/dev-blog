@@ -1,6 +1,6 @@
 import { getAllPages,getPage } from "../../../utils/post-api";
 import NotionRenderer from "../NotionRenderer";
-import { FirstBlock } from '@/utils/block-types';
+import { notFound } from "next/navigation";
 
 type params = {id:string}
 
@@ -18,6 +18,9 @@ async function getCachedPage(params:params) {
 
 export default async function post({params}:{params:params}) {
     const post = await getCachedPage(params);
+    
+    if(!post)
+        notFound()
 
     return <div>
         {post===null ? '' : <NotionRenderer blocks={post} />}
