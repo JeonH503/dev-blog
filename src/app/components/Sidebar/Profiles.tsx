@@ -6,7 +6,7 @@ import Link from "next/link"
 import profilePhoto from '../../../../public/profile.jpg'
 import github from '../../../../public/github.png'
 
-const ProgilesWrap = styled.nav`
+const ProfilesWrap = styled.nav`
     background: rgb(57,62,70);
     background: linear-gradient(180deg, rgba(57,62,70,1) 48%, rgba(234,234,234,1) 100%);
     padding:10px 20px;
@@ -38,6 +38,12 @@ const ProgilesWrap = styled.nav`
         border-top-right-radius:50px;
         z-index:1;
     }
+
+    
+    @media screen and (max-width:1023px) {
+        border:0px;
+        background: white;
+    }
 `
 
 const PhotoWrap = styled.div`
@@ -53,18 +59,19 @@ const GithubWrap = styled.div`
     width:25px;
 `
 
-function Progiles() {
-    return<ProgilesWrap>
+function Profiles() {
+    return<ProfilesWrap>
         <PhotoWrap>
             <Image src={profilePhoto} width={150} height={150} alt="profile"></Image>
         </PhotoWrap>
+        <h4>전준희</h4>
         <h4>JunHui Jeon</h4>
         <GithubWrap>
             <Link href="https://github.com/JeonH503">
                 <Image src={github} width={25} height={25} alt="profile-github"></Image>
             </Link>
         </GithubWrap>
-    </ProgilesWrap>
+    </ProfilesWrap>
 }
 
-export default Progiles
+export default Profiles

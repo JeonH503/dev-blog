@@ -34,6 +34,10 @@ const NavWrap = styled.nav`
     & ul > a:active > li {
         font-weight:bold;
     }
+
+    @media screen and (max-width:1023px) {
+        border:0px;
+    }
 `
 
 const List = styled.li<{selected:boolean}>`
@@ -49,12 +53,11 @@ const Divider = styled.div`
 
 function Nav({categories}:{categories:string[]}) {
     const pathname = usePathname();
-
     return<NavWrap>
         <h4>분류</h4>
         <Divider/>
         <ul>
-            {categories.map(category => <Link key={category} prefetch={false} href={'/category/'+category}><List selected={pathname === '/category/'+category}>{category}</List></Link>)}
+            {categories.map(category => <Link key={category} prefetch={false} href={'/category/'+category}><List selected={decodeURIComponent(pathname) === '/category/'+category}>{category}</List></Link>)}
         </ul>
     </NavWrap>
 }

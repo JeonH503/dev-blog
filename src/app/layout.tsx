@@ -21,7 +21,7 @@ export default async function RootLayout({
       <body>
         <StyledComponentsRegistry>
           <GlobalStyles/>
-          <Header/>
+          <Header categories={categories}/>
           <FlexBox>
             <Main>
               {children}

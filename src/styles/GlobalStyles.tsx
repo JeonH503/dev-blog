@@ -12,7 +12,7 @@ const GlobalStyles = createGlobalStyle`
         background:rgb(245, 245, 245);
         min-height:100vh; 
         max-width: 100vw;
-        overflow: overlay;
+        // overflow: overlay;
     }
     
 `

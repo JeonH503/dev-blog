@@ -2,6 +2,11 @@
 
 import Link from "next/link"
 import styled from "styled-components"
+import hamburger from '../../../public/hamburger.svg'
+import Image from "next/image"
+import Sidebar from "./Sidebar/Sidebar"
+import { useEffect, useState } from "react"
+import { usePathname } from 'next/navigation';
 
 const HeaderWrap = styled.header`
     width:100%;
@@ -18,6 +23,7 @@ const FlexBox = styled.div`
     width:900px;
     height:100%;
     display:flex;
+    justify-content: space-between;
     align-items: center;
     margin:0 auto;
 
@@ -26,22 +32,75 @@ const FlexBox = styled.div`
         color:black;
         margin:0 20px;
     }
+
+    & img {
+        display:none;
+        cursor:pointer;
+    }
+
+    @media screen and (max-width:1023px) {
+        width:100%;
+        
+        & img {
+            display:block;
+            // margin-right:25px;
+        }
+    }
 `
 
-// /* 데스크탑 */
+const HamburgerWrap = styled.div<{display:boolean}>`
+    position:fixed;
+    width:100%;
+    height:100vh;
+    background:rgba(0,0,0,0.5);
+    display:none;
 
-// @media screen and (max-width:1023px) {
-//     /* 타블렛 */
-//     }
+    @media screen and (max-width:1023px) {
+        display:${(props)=>props.display ? 'flex' : 'none'};
+        justify-content: end;
+    }
+`
+
+function Header({categories}:{categories:string[]}) {
+    const [hamburgerDisplay, setHamburgerDisplay] = useState(false);
     
-//     @media screen and (max-width:767px) {
-//     /* 모바일 */
-//     }
+    const pathname = usePathname();
 
-function Header() {
+    const hamburgerEvent = () => {
+        if(hamburgerDisplay) {
+            document.body.style.overflowY = 'auto'
+        } else {
+            document.body.style.overflowY = 'hidden'
+        }
+
+        setHamburgerDisplay(!hamburgerDisplay)
+    }
+
+    // 페이지 이동될때(사용자가 nav를 눌렀을때) nav 창 닫기
+    // useEffect(() => {
+        // hamburgerEvent()
+    // },[pathname])
+
+    // hamburger가 켜진상태로 리사이즈시 원상태로 되돌리기
+    useEffect(() => {
+        window.addEventListener('resize', () => {
+            if(window.innerWidth > 1023) {
+                setHamburgerDisplay(false);
+                document.body.style.overflowY = 'auto'
+            }
+        },true)
+    })
+
     return <HeaderWrap>
+        <HamburgerWrap display={hamburgerDisplay} onClick={hamburgerEvent}>
+            {/* 캡쳐링 비활성화 */}
+            <span onClick={(event)=>{event.stopPropagation()}}>
+                <Sidebar categories={categories} header={true}/>
+            </span>
+        </HamburgerWrap>
         <FlexBox>
             <Link prefetch={false} href={'/'}><h2>JJH&apos;s Blog</h2></Link>
+            <Image alt="hamburger" src={hamburger} width={30} height={30} onClick={hamburgerEvent}/>
         </FlexBox>
     </HeaderWrap>
 }
