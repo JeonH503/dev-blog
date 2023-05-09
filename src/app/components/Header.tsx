@@ -48,7 +48,7 @@ const FlexBox = styled.div`
     }
 `
 
-const HamburgerWrap = styled.div<{display:boolean}>`
+const HamburgerWrap = styled.div<{hamburgerDisplay:boolean}>`
     position:fixed;
     width:100%;
     height:100vh;
@@ -56,7 +56,7 @@ const HamburgerWrap = styled.div<{display:boolean}>`
     display:none;
 
     @media screen and (max-width:1023px) {
-        display:${(props)=>props.display ? 'flex' : 'none'};
+        display:${(props)=>props.hamburgerDisplay ? 'flex' : 'none'};
         justify-content: end;
     }
 `
@@ -76,10 +76,17 @@ function Header({categories}:{categories:string[]}) {
         setHamburgerDisplay(!hamburgerDisplay)
     }
 
+    const closeHamburger = () => {
+        document.body.style.overflowY = 'auto'
+        setHamburgerDisplay(false)
+    }
+
     // 페이지 이동될때(사용자가 nav를 눌렀을때) nav 창 닫기
-    // useEffect(() => {
-        // hamburgerEvent()
-    // },[pathname])
+    useEffect(() => {
+        return () => {
+            closeHamburger()
+        }
+    },[pathname])
 
     // hamburger가 켜진상태로 리사이즈시 원상태로 되돌리기
     useEffect(() => {
@@ -92,14 +99,14 @@ function Header({categories}:{categories:string[]}) {
     })
 
     return <HeaderWrap>
-        <HamburgerWrap display={hamburgerDisplay} onClick={hamburgerEvent}>
+        <HamburgerWrap hamburgerDisplay={hamburgerDisplay} onClick={hamburgerEvent}>
             {/* 캡쳐링 비활성화 */}
             <span onClick={(event)=>{event.stopPropagation()}}>
                 <Sidebar categories={categories} header={true}/>
             </span>
         </HamburgerWrap>
         <FlexBox>
-            <Link prefetch={false} href={'/'}><h2>JJH&apos;s Blog</h2></Link>
+            <Link href={'/'}><h2>JJH&apos;s Blog</h2></Link>
             <Image alt="hamburger" src={hamburger} width={30} height={30} onClick={hamburgerEvent}/>
         </FlexBox>
     </HeaderWrap>

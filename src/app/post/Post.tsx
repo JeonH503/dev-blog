@@ -79,7 +79,7 @@ function Post({title,created_time,tag,id,cover}:Props) {
         <ImageWrap cover={cover}> 
             {
                 cover !== '' ? 
-                <Link prefetch={false} href={'/post/'+title}>
+                <Link href={'/post/'+title}>
                     <Image style={{width:"100%", height:"auto"}} quality={40} width={660} height={300} src={cover} alt={`${title}-cover`}/>
                 </Link> : 
                 null
@@ -87,13 +87,13 @@ function Post({title,created_time,tag,id,cover}:Props) {
         </ImageWrap>
         <InfoWrap>
             <h2>
-                <Link prefetch={false} href={'/post/'+title}>{title.replaceAll('-',' ')}</Link>
+                <Link href={'/post/'+title}>{title.replaceAll('-',' ')}</Link>
             </h2>
             <FlexWrap>
-                <Link prefetch={false} href={'/post/'+title}>
+                <Link href={'/category/'+tag}>
                     <Tag># {tag}</Tag>
                 </Link>
-                <Time>{moment(created_time).format("YYYY-MM-DD HH:mm:ss")}</Time>
+                <Time>{moment(created_time).format("YYYY-MM-DD")}</Time>
             </FlexWrap>
         </InfoWrap>
     </PostWrap>

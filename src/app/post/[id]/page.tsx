@@ -1,7 +1,9 @@
 import { getAllPages,getPage } from "../../../utils/post-api";
 import NotionRenderer from "../NotionRenderer";
 import { notFound } from "next/navigation";
-
+import Script from 'next/script';
+import Comments from "@/app/components/Comments";
+import { Suspense } from "react";
 type params = {id:string}
 
 export const dynamicParams = true;
@@ -18,11 +20,12 @@ async function getCachedPage(params:params) {
 
 export default async function post({params}:{params:params}) {
     const post = await getCachedPage(params);
-    
+
     if(!post)
         notFound()
 
     return <div>
         {post===null ? '' : <NotionRenderer blocks={post} />}
+        {/* <Comments/> */}
     </div>
 }
