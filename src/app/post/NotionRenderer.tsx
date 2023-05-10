@@ -5,6 +5,7 @@ import { FirstBlock } from '@/utils/block-types';
 import styled from 'styled-components';
 import { usePathname } from 'next/navigation';
 import moment from 'moment';
+import { Suspense } from 'react';
 
 
 type Tables = {[key:string]:FirstBlock}
@@ -47,7 +48,9 @@ function NotionRenderer({blocks, tables}:Props) {
             <Title>{decodeURIComponent(pathname).split('/')[2].replaceAll("-",' ')}</Title>
             <CreatedTime>{moment(Array.isArray(blocks.results) ? blocks.results[0].created_time : '').format('YYYY-MM-DD')}</CreatedTime>
         </TitleWrap>
-        <NotionPost blocks={blocks} tables={tables} />
+        <Suspense fallback={"test"}>
+            <NotionPost blocks={blocks} tables={tables} />
+        </Suspense>
     </NotionWrap>
 }
 

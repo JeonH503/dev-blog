@@ -1,9 +1,13 @@
-import { getAllPages,getPage } from "../../../utils/post-api";
-import NotionRenderer from "../NotionRenderer";
-import { notFound } from "next/navigation";
-import Script from 'next/script';
-import Comments from "@/app/components/Comments";
 import { Suspense } from "react";
+import dynamic from 'next/dynamic';
+import { getAllPages,getPage } from "../../../utils/post-api";
+import { notFound } from "next/navigation";
+import Comments from "@/app/components/Comments";
+
+const NotionRenderer = dynamic(() => import('../NotionRenderer'),{
+    loading: () => <p>Loading...</p>,
+  },);
+
 type params = {id:string}
 
 export const dynamicParams = true;
@@ -26,6 +30,6 @@ export default async function post({params}:{params:params}) {
 
     return <div>
         {post===null ? '' : <NotionRenderer blocks={post} />}
-        {/* <Comments/> */}
+        <Comments/>
     </div>
 }

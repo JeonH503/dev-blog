@@ -1,6 +1,7 @@
 "use client"
 
 import styled from "styled-components"
+import { useState } from "react";
 
 const MainWrap = styled.section`
     width:700px;
