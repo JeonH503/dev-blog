@@ -58,7 +58,7 @@ function Nav({categories}:{categories:string[]}) {
         <Divider/>
         <ul>
         <List selected={decodeURIComponent(pathname) === '/'}><Link href={'/'}>전체보기</Link></List>
-            {categories.map(category => <List selected={decodeURIComponent(pathname) === '/category/'+category}><Link key={category} href={'/category/'+category}>{category}</Link></List>)}
+            {categories.map(category => <List key={category} selected={decodeURIComponent(pathname) === '/category/'+category}><Link href={'/category/'+category}>{category}</Link></List>)}
         </ul>
     </NavWrap>
 }
