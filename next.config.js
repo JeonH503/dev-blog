@@ -16,6 +16,7 @@ const nextConfig = {
       }
     ]
   },
+  export:'output',
   reactStrictMode:false,
 }
 
