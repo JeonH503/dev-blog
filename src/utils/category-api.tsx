@@ -180,7 +180,7 @@ export const getCategorizedPosts = async (category:string = '',next_cursor:null|
         },
         body:JSON.stringify(body),
         next:{
-            revalidate:100
+            revalidate:300
         }
     })
 

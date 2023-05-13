@@ -21,17 +21,17 @@ const NavWrap = styled.nav`
         margin:8px 0;
     }
 
-    & ul > a {
+    & ul > li > a {
         margin:8px 0;
         text-decoration:none;
         color:black;
     }
 
-    & ul > a:hover > li {
+    & ul > li > a:hover  {
         font-weight:bold;
     }
 
-    & ul > a:active > li {
+    & ul > li > a:active  {
         font-weight:bold;
     }
 
@@ -57,8 +57,8 @@ function Nav({categories}:{categories:string[]}) {
         <h4>분류</h4>
         <Divider/>
         <ul>
-            <Link href={'/'}><List selected={decodeURIComponent(pathname) === '/'}>전체보기</List></Link>
-            {categories.map(category => <Link key={category} href={'/category/'+category}><List selected={decodeURIComponent(pathname) === '/category/'+category}>{category}</List></Link>)}
+        <List selected={decodeURIComponent(pathname) === '/'}><Link href={'/'}>전체보기</Link></List>
+            {categories.map(category => <List selected={decodeURIComponent(pathname) === '/category/'+category}><Link key={category} href={'/category/'+category}>{category}</Link></List>)}
         </ul>
     </NavWrap>
 }

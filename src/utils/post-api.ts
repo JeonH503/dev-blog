@@ -1,6 +1,8 @@
 const database_id = 'bab4339516874f58b9c7c3e542a791c9';
 const token = 'secret_JtdV6RdpsJNiwIs871Lrzkya5Af0hFyXcDoIECGtT96';
 
+import { FileExternal,File } from "./block-types";
+
 interface Posts {
     results:Result[];
     next_cursor: string | null,
@@ -20,7 +22,7 @@ interface Result {
         object: string,
         id: string
     },
-    cover: null | string,
+    cover: FileExternal|File|null;
     icon: null | string,
     parent: {
         type: string,
@@ -89,7 +91,30 @@ interface Result {
                     href: null
                 }
             ]
-        }
+        },
+        설명: {
+            id: string,
+            type: string,
+            rich_text: [
+                {
+                    type: string,
+                    text: {
+                        content: string,
+                        link: null
+                    },
+                    annotations: {
+                        bold: boolean,
+                        italic: boolean,
+                        strikethrough: boolean,
+                        underline: boolean,
+                        code: boolean,
+                        color: string
+                    },
+                    plain_text: string,
+                    href: null
+                }
+            ]
+        },
     },
     url: string
 }
@@ -140,25 +165,25 @@ export const getAllPages = async () => {
 
 export const getPage = async (id:string) => { //staticPaths 에서 한번 실행되고 나면 id 필요 없음
     const decodedId = decodeURIComponent(id)
-    let post_id = await searchPost(decodedId)
+    let post_info = await searchPost(decodedId)
     
-    if(post_id === null)
+    if(post_info === null)
         return null;
 
-    const response:any = await fetch(`https://api.notion.com/v1/blocks/${post_id}/children`, //block 데이터 가져오는 쿼리
+    const response:any = await fetch(`https://api.notion.com/v1/blocks/${post_info.id}/children`, //block 데이터 가져오는 쿼리
         {
             headers:{
                 'Authorization' : `Bearer ${token}`,
                 'Content-Type' : 'application/json',
                 'Notion-Version' : '2022-02-22'
-            },
-            next:{
-                revalidate:300
             }
         }
     )
 
-    return await response.json()
+    return {
+        info:post_info,
+        block:await response.json()
+    }
 }
 
 export const searchPost = async (title:string) => {
@@ -181,10 +206,24 @@ export const searchPost = async (title:string) => {
         }
     )
     
-
     const post:Posts = await response.json()
-    
-    if(post.results.length === 1)
-        return post.results[0].properties.ID.rich_text[0].plain_text
+    if(post.results.length === 1){
+        let cover = null;
+        if(post.results[0].cover) {
+            if(post.results[0].cover.type === 'external') {
+                cover = post.results[0].cover.external.url
+            } else if(post.results[0].cover.type === 'file') {
+                cover = post.results[0].cover.file.url
+            }
+        }
+
+        return {
+            id:post.results[0].properties.ID.rich_text[0].plain_text,
+            title:post.results[0].properties.이름.title[0].plain_text,
+            desc:post.results[0].properties.설명.rich_text[0].plain_text,
+            created_time:post.results[0].properties.생성일.created_time,
+            cover
+        }
+    }
     return null;
 }

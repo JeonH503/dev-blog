@@ -3,16 +3,21 @@
 import NotionPost from 'notion-to-react';
 import { FirstBlock } from '@/utils/block-types';
 import styled from 'styled-components';
-import { usePathname } from 'next/navigation';
 import moment from 'moment';
-import { Suspense } from 'react';
 
 
 type Tables = {[key:string]:FirstBlock}
 
 interface Props {
     blocks:FirstBlock;
-    tables?:Tables
+    tables?:Tables;
+    info: {
+        id: string;
+        title: string;
+        desc: string;
+        cover: string | null;
+        created_time: string;
+    }
 }
 
 const NotionWrap = styled.div`
@@ -25,32 +30,51 @@ const NotionWrap = styled.div`
 `
 
 const Title = styled.h1`
-    border-bottom: 1px solid rgba(55,53,47,0.16);
     padding-bottom:15px;
+    z-index: 0;
+    position: relative;
+    font-size:30px;
 `
 
 const CreatedTime = styled.p`
-    color: #666666;
     text-align:right;
-    margin-right:5px;
+    margin-right:15px;
+    z-index: 0;
+    position: relative;
 `
 
-const TitleWrap = styled.div`
+const TitleWrap = styled.div<{background:string|null}>`
     text-align:center;
+    height:200px;
     margin-bottom:30px;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+    ${props=>props.background ? `color:white;` : 'color:black;'}
+
+    &:before {
+        ${props=>props.background ? `background:url(${props.background});` : ''}
+        background-size: cover;
+        // opacity: 0.6;
+        content: '';
+        position: absolute;
+        top: 0; 
+        left:0; 
+        right:0;
+        bottom:0;
+        filter: blur(3px) brightness(70%);
+        border-radius:10px;
+    }
 `
 
-function NotionRenderer({blocks, tables}:Props) {
-    const pathname = usePathname();
-
+function NotionRenderer({blocks, tables, info}:Props) {
     return <NotionWrap>
-        <TitleWrap>
-            <Title>{decodeURIComponent(pathname).split('/')[2].replaceAll("-",' ')}</Title>
-            <CreatedTime>{moment(Array.isArray(blocks.results) ? blocks.results[0].created_time : '').format('YYYY-MM-DD')}</CreatedTime>
+        <TitleWrap background={info.cover}>
+            <Title>{info.title}</Title>
+            <CreatedTime>{moment(info.created_time).format('YYYY-MM-DD')}</CreatedTime>
         </TitleWrap>
-        <Suspense fallback={"test"}>
-            <NotionPost blocks={blocks} tables={tables} />
-        </Suspense>
+        <NotionPost blocks={blocks} tables={tables} />
     </NotionWrap>
 }
 

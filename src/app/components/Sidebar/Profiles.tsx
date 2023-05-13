@@ -16,11 +16,6 @@ const ProfilesWrap = styled.nav`
     position:relative;
     overflow:hidden;
 
-    & h4 {
-        text-align:center;
-        margin:10px 0;
-    }
-
     & * {
         position:relative;
         z-index:100;
@@ -59,13 +54,20 @@ const GithubWrap = styled.div`
     width:25px;
 `
 
+const Bold = styled.p`
+    text-align:center;
+    margin-bottom:1px;
+    font-size:17px;
+    font-weight:bold;
+`
+
 function Profiles() {
     return<ProfilesWrap>
         <PhotoWrap>
             <Image src={profilePhoto} width={150} height={150} alt="profile"></Image>
         </PhotoWrap>
-        <h4>전준희</h4>
-        <h4>JunHui Jeon</h4>
+        <Bold>전준희</Bold>
+        <Bold>JunHui Jeon</Bold>
         <GithubWrap>
             <Link href="https://github.com/JeonH503">
                 <Image src={github} width={25} height={25} alt="profile-github"></Image>
