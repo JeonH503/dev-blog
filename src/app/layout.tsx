@@ -1,4 +1,4 @@
-import StyledComponentsRegistry from './lib/registry'
+import StyledComponentsRegistry from '../lib/registry'
 import GlobalStyles from "../styles/GlobalStyles";
 import FlexBox from '@/styles/FlexBox';
 import { Header,Main,Sidebar } from './components';
