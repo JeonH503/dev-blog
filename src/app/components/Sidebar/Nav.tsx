@@ -52,7 +52,7 @@ const Divider = styled.div`
 
 function Nav({categories}:{categories:string[]}) {
     const pathname = usePathname();
-    console.log(pathname);
+    console.log(pathname, pathname === '/dev-blog/' || pathname === '/dev-blog/index');
     return<NavWrap>
         <h4>분류</h4>
         <Divider/>
