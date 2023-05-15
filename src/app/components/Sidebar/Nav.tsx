@@ -39,9 +39,9 @@ const NavWrap = styled.nav`
     }
 `
 
-const List = styled.li<{selected:boolean}>`
+const List = styled.li<{pathname:string, link:string}>`
     margin:8px 0;
-    ${(props)=>{return props.selected ? 'font-weight:bold':'font-weight:normal'}};
+    ${(props)=> props.pathname === props.link ? 'font-weight:bold':'font-weight:normal'};
 `
 
 const Divider = styled.div`
@@ -56,8 +56,8 @@ function Nav({categories}:{categories:string[]}) {
         <h4>분류</h4>
         <Divider/>
         <ul>
-            <List selected={pathname === '/dev-blog/' || pathname === '/dev-blog/index'}><Link href={'/index'}>전체보기</Link></List>
-            {categories.map(category => <List key={category} selected={decodeURIComponent(pathname) === '/dev-blog/category/'+category}><Link href={'/category/'+category}>{category}</Link></List>)}
+            <List pathname={pathname} link={'/dev-blog/'}><Link href={'/'}>전체보기</Link></List>
+            {categories.map(category => <List key={category} pathname={decodeURIComponent(pathname)} link={'/dev-blog/category/'+category}><Link href={'/category/'+category}>{category}</Link></List>)}
         </ul>
     </NavWrap>
 }
