@@ -179,7 +179,7 @@ export const getCategorizedPosts = async (category:string = '',next_cursor:null|
             'Notion-Version' : '2022-02-22'
         },
         body:JSON.stringify(body),
-        cache:'no-store'
+        next: { revalidate:0}
     })
 
     const posts:Posts = await response.json()
