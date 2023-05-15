@@ -41,7 +41,7 @@ const NavWrap = styled.nav`
 
 const List = styled.li<{selected:boolean}>`
     margin:8px 0;
-    ${(props)=>{return props.selected ? 'font-weight:bold':'font-weight:normal'}};
+    // ${(props)=>{return props.selected ? 'font-weight:bold':'font-weight:normal'}};
 `
 
 const Divider = styled.div`

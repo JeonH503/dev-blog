@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 async function Category({params}:{params:params}) {
   let result = await getCachedPage(params)
   return <div>
-    <CategorizedPosts posts={result.posts} category="" next_cursor={result.next_cursor} />
+    <CategorizedPosts posts={result.posts} category={params.id} next_cursor={result.next_cursor} />
   </div>
 }
 

@@ -86,9 +86,9 @@ function Post({title,created_time,tag,id,cover}:Props) {
             }
         </ImageWrap>
         <InfoWrap>
-            <h2>
+            <h3>
                 <Link href={'/post/'+title}>{title.replaceAll('-',' ')}</Link>
-            </h2>
+            </h3>
             <FlexWrap>
                 <Link href={'/category/'+tag}>
                     <Tag># {tag}</Tag>

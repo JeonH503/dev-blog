@@ -1,6 +1,7 @@
 'use client'
 
 import Post from "@/app/post/Post";
+import styled from "styled-components";
 import { PostsMap } from "@/utils/category-api";
 import { useCallback, useEffect,useState } from "react";
 
@@ -9,6 +10,11 @@ interface Props {
     category:string,
     next_cursor:string|null
 }
+
+const CategoryTitle = styled.h2`
+    text-align:center;
+    margin-bottom:5px;
+`
 
 //next_cursor = 초기값 , _next_cursor 이후 업데이트 될 값
 function CategorizedPosts({posts,category="",next_cursor=null}:Props) {
@@ -49,6 +55,7 @@ function CategorizedPosts({posts,category="",next_cursor=null}:Props) {
     },[loading,getNextPosts])
 
     return <div>
+        <CategoryTitle>{category === '' ? '' : '#'+decodeURIComponent(category)}</CategoryTitle>
         {Object.keys(_posts).map((key:string) => <Post key={key} title={_posts[key].name} created_time={_posts[key].created_time} tag={_posts[key].tag} id={_posts[key].id} cover={_posts[key].cover}></Post>)}
         {loading}
     </div>
