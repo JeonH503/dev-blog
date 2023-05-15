@@ -102,7 +102,7 @@ function Header({categories}:{categories:string[]}) {
             }
         </HamburgerWrap>
         <FlexBox>
-            <Link href={'/'}><h2>JJH&apos;s Blog</h2></Link>
+            <Link href={'/index'}><h2>JJH&apos;s Blog</h2></Link>
             <Image alt="hamburger" src={hamburger} width={30} height={30} onClick={openHamburger}/>
         </FlexBox>
     </HeaderWrap>
