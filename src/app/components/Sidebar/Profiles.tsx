@@ -9,11 +9,12 @@ import github from '../../../../public/github.png'
 const ProfilesWrap = styled.nav`
     background: rgb(57,62,70);
     background: linear-gradient(180deg, rgba(57,62,70,1) 48%, rgba(234,234,234,1) 100%);
-    padding:10px 20px 0 20px;
+    padding:10px 20px;
     border-radius:10px;
     border:1px solid #eaeaea;
     width:100%;
     position:relative;
+    margin-bottom:7px;
 
     & * {
         position:relative;
@@ -28,6 +29,7 @@ const ProfilesWrap = styled.nav`
         height: 170px;
         width: 100%;
         background:white;
+        border-radius:10px;
         border-top-left-radius:50px;
         border-top-right-radius:50px;
         z-index:1;
@@ -50,7 +52,6 @@ const PhotoWrap = styled.div`
 
 const GithubWrap = styled.div`
     margin:0 auto;
-    margin-top:5px;
     width:25px;
 `
 
