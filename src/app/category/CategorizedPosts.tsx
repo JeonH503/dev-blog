@@ -39,7 +39,9 @@ function CategorizedPosts({posts,category="",next_cursor=null}:Props) {
             setLoading(false);
             return;
         }
-        let res = await fetch(`/api?category=${category}&next_cursor=${_next_cursor}`)
+        let res = await fetch(`/api?category=${category}&next_cursor=${_next_cursor}`,{
+            cache:'no-store'
+        })
         let resData = await res.json()
         let posts:PostsMap = resData.data.posts
         
