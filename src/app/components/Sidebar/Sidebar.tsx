@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from "react"
 import Nav from "./Nav"
 import Profiles from "./Profiles"
 import styled from "styled-components"
@@ -9,6 +10,8 @@ const SidebarWrap = styled.div<{header?:boolean}>`
     flex-direction: column;
     padding-top:10px;
     width:200px;
+    overflow:auto;
+    touch-action:none;
 
     @media screen and (max-width:1023px) {
         background:white;
@@ -24,6 +27,18 @@ const SidebarWrap = styled.div<{header?:boolean}>`
 `
 
 function Sidebar({categories,header}:{categories:string[],header?:boolean}) {
+    useEffect(() => {
+        if(header) {
+            document.body.style.overflowY = 'hidden'
+            document.body.style.touchAction = 'none'
+
+            return () => {
+                document.body.style.overflowY = 'auto'
+                document.body.style.touchAction = 'auto'
+            }
+        }
+    },[])
+    
     return<SidebarWrap header={header}>
         <Profiles/>
         <Nav categories={categories} />

@@ -36,6 +36,7 @@ const FlexBox = styled.div`
     & img {
         display:none;
         cursor:pointer;
+        margin-right:10px;
     }
 
     @media screen and (max-width:1023px) {
@@ -50,6 +51,7 @@ const FlexBox = styled.div`
 
 const HamburgerWrap = styled.div<{hamburgerDisplay:boolean}>`
     position:fixed;
+    top:0px;
     width:100%;
     height:100vh;
     background:rgba(0,0,0,0.5);
@@ -66,18 +68,11 @@ function Header({categories}:{categories:string[]}) {
     
     const pathname = usePathname();
 
-    const hamburgerEvent = () => {
-        if(hamburgerDisplay) {
-            document.body.style.overflowY = 'auto'
-        } else {
-            document.body.style.overflowY = 'hidden'
-        }
-
-        setHamburgerDisplay(!hamburgerDisplay)
+    const openHamburger = () => {
+        setHamburgerDisplay(true)
     }
 
     const closeHamburger = () => {
-        document.body.style.overflowY = 'auto'
         setHamburgerDisplay(false)
     }
 
@@ -92,22 +87,23 @@ function Header({categories}:{categories:string[]}) {
     useEffect(() => {
         window.addEventListener('resize', () => {
             if(window.innerWidth > 1023) {
-                setHamburgerDisplay(false);
-                document.body.style.overflowY = 'auto'
+                closeHamburger()
             }
         },true)
-    })
+    },[])
 
     return <HeaderWrap>
-        <HamburgerWrap hamburgerDisplay={hamburgerDisplay} onClick={hamburgerEvent}>
+        <HamburgerWrap hamburgerDisplay={hamburgerDisplay} onClick={closeHamburger}>
             {/* 캡쳐링 비활성화 */}
-            <span onClick={(event)=>{event.stopPropagation()}}>
-                <Sidebar categories={categories} header={true}/>
-            </span>
+            {
+                hamburgerDisplay && <span onClick={(event)=>{event.stopPropagation()}}>
+                    <Sidebar categories={categories} header={true}/>
+                </span>
+            }
         </HamburgerWrap>
         <FlexBox>
             <Link href={'/index'}><h2>JJH&apos;s Blog</h2></Link>
-            <Image alt="hamburger" src={hamburger} width={30} height={30} onClick={hamburgerEvent}/>
+            <Image alt="hamburger" src={hamburger} width={30} height={30} onClick={openHamburger}/>
         </FlexBox>
     </HeaderWrap>
 }

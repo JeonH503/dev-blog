@@ -6,10 +6,9 @@ import { usePathname } from "next/navigation"
 
 const NavWrap = styled.nav`
     background:white;
-    padding:10px 20px;
+    padding:0 20px 10px 20px;
     border-radius:10px;
     border:1px solid #eaeaea;
-    margin-top:15px;
     width:100%;
 
     & ul {
@@ -53,6 +52,7 @@ const Divider = styled.div`
 
 function Nav({categories}:{categories:string[]}) {
     const pathname = usePathname();
+    console.log(pathname);
     return<NavWrap>
         <h4>분류</h4>
         <Divider/>
