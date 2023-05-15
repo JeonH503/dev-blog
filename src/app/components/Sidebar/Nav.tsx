@@ -41,7 +41,7 @@ const NavWrap = styled.nav`
 
 const List = styled.li<{selected:boolean}>`
     margin:8px 0;
-    ${(props)=>{console.log(props.selected); return props.selected ? 'font-weight:bold;':''}}
+    ${(props)=>{return props.selected ? 'font-weight:bold':'font-weight:normal'}};
 `
 
 const Divider = styled.div`
@@ -52,7 +52,6 @@ const Divider = styled.div`
 
 function Nav({categories}:{categories:string[]}) {
     const pathname = usePathname();
-    console.log(pathname, pathname === '/dev-blog/' || pathname === '/dev-blog/index');
     return<NavWrap>
         <h4>분류</h4>
         <Divider/>
