@@ -57,7 +57,7 @@ function CategorizedPosts({posts,category="",next_cursor=null}:Props) {
     },[loading,getNextPosts])
 
     return <div>
-        <CategoryTitle>{category === '' ? '' : '#'+decodeURIComponent(category)}</CategoryTitle>
+        {category !== '' && <CategoryTitle>{'#'+decodeURIComponent(category)}</CategoryTitle>}
         {Object.keys(_posts).map((key:string) => <Post key={key} title={_posts[key].name} created_time={_posts[key].created_time} tag={_posts[key].tag} id={_posts[key].id} cover={_posts[key].cover}></Post>)}
         {loading}
     </div>

@@ -160,7 +160,7 @@ export const getCategorizedPosts = async (category:string = '',next_cursor:null|
             "contains": category
           }
         },
-        "page_size":20,
+        "page_size":10,
         "start_cursor":next_cursor
     } : 
     {
@@ -170,7 +170,7 @@ export const getCategorizedPosts = async (category:string = '',next_cursor:null|
             "contains": category
           }
         },
-        "page_size":20,
+        "page_size":10,
     }
 
     const response:any = await fetch(`https://api.notion.com/v1/databases/${database_id}/query`,{

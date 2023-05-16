@@ -10,10 +10,15 @@ const PostWrap = styled.div`
     border-radius:15px;
     border:1px solid #eaeaea;
     margin-bottom:15px;
+    transition: all .05s ease-in;
 
     & a {
         text-decoration:none;
         color:black;
+    }
+
+    &:has(a:hover) {
+        transform: scale(1.02, 1.02);
     }
 
     & div:first-child:hover + div h2 a {
@@ -34,7 +39,6 @@ const FlexWrap = styled.div`
 `
 
 const Tag = styled.p`
-    width:80px;
     padding:5px 10px;
     background:#eaeaea;
     border:1px solid #eaeaea;

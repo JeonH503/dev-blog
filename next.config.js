@@ -10,13 +10,11 @@ const nextConfig = {
     remotePatterns:[
       {
         protocol:"https",
-        hostname:'www.notion.so',
-        port:'',
-        pathname:'/images/**'
+        hostname:'*',
       }
     ]
   },
-  output:'export',
+  // output:'export',
   reactStrictMode:false,
 }
 

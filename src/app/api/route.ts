@@ -6,6 +6,8 @@ export async function GET(request: Request) {
     const category = searchParams.get('category');
     const next_cursor = searchParams.get('next_cursor');
     let data;
+
+    console.log("test")
     try {
         data = await getCategorizedPosts(category ? category : "",next_cursor)
     } catch {
