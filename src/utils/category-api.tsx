@@ -160,6 +160,7 @@ export const getCategorizedPosts = async (category:string = '',next_cursor:null|
             "contains": category
           }
         },
+        "page_size":20,
         "start_cursor":next_cursor
     } : 
     {
@@ -168,7 +169,8 @@ export const getCategorizedPosts = async (category:string = '',next_cursor:null|
           "multi_select": {
             "contains": category
           }
-        }
+        },
+        "page_size":20,
     }
 
     const response:any = await fetch(`https://api.notion.com/v1/databases/${database_id}/query`,{
