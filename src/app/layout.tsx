@@ -29,10 +29,10 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={noto_sans_kr.className}>
-      <link rel="icon" href="/icon/favicon.ico" sizes="any" />
-      <link rel="icon" type="image/png" sizes="32x32" href="/icon/favicon-32x32.png"/>
-      <link rel="icon" type="image/png" sizes="16x16" href="/icon/favicon-16x16.png"/>
-      <link rel="apple-touch-icon" href="/icon/apple-touch-icon.png" type="image/png"/>
+      <link rel="icon" href="/dev-blog/icon/favicon.ico" sizes="any" />
+      <link rel="icon" type="image/png" sizes="32x32" href="/dev-blog/icon/favicon-32x32.png"/>
+      <link rel="icon" type="image/png" sizes="16x16" href="/dev-blog/icon/favicon-16x16.png"/>
+      <link rel="apple-touch-icon" href="/dev-blog/icon/apple-touch-icon.png" type="image/png"/>
       <body>
           <StyledComponentsRegistry>
             <GlobalStyles/>

@@ -27,6 +27,10 @@ const NotionWrap = styled.div`
     padding:40px;
     margin-bottom:15px;
     position:relative;
+
+    @media screen and (max-width:767px) {
+        padding:40px 20px;
+    }
 `
 
 const Title = styled.h1`

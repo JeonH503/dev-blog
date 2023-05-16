@@ -13,6 +13,7 @@ const MainWrap = styled.section`
 
     @media screen and (max-width:767px) {
         width:100vw;
+        padding:10px 0px;
     }
 `
 
