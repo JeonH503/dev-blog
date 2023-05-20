@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { useState } from "react";
 
 const MainWrap = styled.section`
-    width:700px;
+    width:800px;
     padding:10px 20px;
 
     // @media screen and (max-width:1023px) {
