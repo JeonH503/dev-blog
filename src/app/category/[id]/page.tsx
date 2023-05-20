@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const id = params.id;
  
   return {
-    title: '#'+id,
+    title: '#'+decodeURIComponent(id),
   };
 }
 

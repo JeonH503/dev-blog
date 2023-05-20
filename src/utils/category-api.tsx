@@ -167,7 +167,7 @@ export const getCategorizedPosts = async (category:string = '',next_cursor:null|
         "filter": {
           "property": "태그",
           "multi_select": {
-            "contains": category
+            "contains": decodeURIComponent(category)
           }
         },
         "page_size":100,
