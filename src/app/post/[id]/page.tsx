@@ -27,10 +27,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const id = decodeURIComponent(params.id);
     const page_info = await searchPost(id);
     return {
-        title: page_info?.title,
+        title: page_info?.title.replaceAll('-', ' '),
         description:page_info?.desc,
         openGraph:{
-            title: page_info?.title,
+            title: page_info?.title.replaceAll('-', ' '),
             description:page_info?.desc,
             images: [{
                 url: page_info?.cover ? page_info.cover : '',
